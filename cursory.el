@@ -148,8 +148,11 @@ With optional LOCAL as a prefix argument, set the
 Can be assigned to `kill-emacs-hook'."
   (when cursory--style-hist
     (with-temp-file cursory-latest-state-file
-      (insert (concat ";; Auto-generated file;"
-                      " don't edit -*- mode: lisp-data -*-\n"))
+      (insert ";; Auto-generated file; don't edit -*- mode: "
+	      (if (<= 28 emacs-major-version)
+		  "lisp-data"
+		"emacs-lisp")
+	      " -*-\n"))
       (pp (intern (car cursory--style-hist)) (current-buffer)))))
 
 (defvar cursory-recovered-preset nil
