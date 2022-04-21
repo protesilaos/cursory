@@ -6,7 +6,7 @@
 #+startup: content
 
 #+macro: stable-version 0.1.0
-#+macro: release-date 2022-04-15
+#+macro: release-date 2022-04-21
 #+macro: development-version 0.2.0-dev
 #+macro: file @@texinfo:@file{@@$1@@texinfo:}@@
 #+macro: space @@texinfo:@: @@
