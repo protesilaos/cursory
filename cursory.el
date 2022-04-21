@@ -47,23 +47,24 @@
   :group 'cursor)
 
 (defcustom cursory-presets
-  '((bar . ( :cursor-type (bar . 2)
-             :cursor-in-non-selected-windows hollow
-             :blink-cursor-blinks 10
-             :blink-cursor-interval 0.5
-             :blink-cursor-delay 0.2))
-
-    (box  . ( :cursor-type box
-              :cursor-in-non-selected-windows hollow
-              :blink-cursor-blinks 10
-              :blink-cursor-interval 0.5
-              :blink-cursor-delay 0.2))
-
-    (underscore . ( :cursor-type (hbar . 3)
-                    :cursor-in-non-selected-windows hollow
-                    :blink-cursor-blinks 50
-                    :blink-cursor-interval 0.2
-                    :blink-cursor-delay 0.2)))
+  '((bar
+     :cursor-type (bar . 2)
+     :cursor-in-non-selected-windows hollow
+     :blink-cursor-blinks 10
+     :blink-cursor-interval 0.5
+     :blink-cursor-delay 0.2)
+    (box
+     :cursor-type box
+     :cursor-in-non-selected-windows hollow
+     :blink-cursor-blinks 10
+     :blink-cursor-interval 0.5
+     :blink-cursor-delay 0.2)
+    (underscore
+     :cursor-type (hbar . 3)
+     :cursor-in-non-selected-windows hollow
+     :blink-cursor-blinks 50
+     :blink-cursor-interval 0.2
+     :blink-cursor-delay 0.2))
   "Alist of preset configurations for `blink-cursor-mode'.
 
 The car of each cons cell is an arbitrary, user-specified key
