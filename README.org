@@ -180,6 +180,18 @@ Remember to read the doc string of each of these variables or functions.
 (define-key global-map (kbd "C-c p") #'cursory-set-preset)
 #+end_src
 
+* Acknowledgements
+:PROPERTIES:
+:CUSTOM_ID: h:cc01247d-ba64-43c8-a4fb-5d75598c01ce
+:END:
+#+cindex: Contributors
+
+Cursory is meant to be a collective effort.  Every bit of help matters.
+
++ Author/maintainer :: Protesilaos Stavrou.
+
++ Contributions to the code or manual :: Philip Kaludercic, Stefan Monnier.
+
 * GNU Free Documentation License
 :PROPERTIES:
 :CUSTOM_ID: h:af16cb04-a07d-4236-b7e9-7759853a2bbc
