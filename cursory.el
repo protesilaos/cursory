@@ -87,7 +87,8 @@ as the corresponding variable."
   :group 'cursory
   :type 'alist) ; FIXME 2022-04-15: Make this usable in the Custom UI
 
-(defcustom cursory-latest-state-file (locate-user-emacs-file "cursory-latest-state")
+(defcustom cursory-latest-state-file
+  (locate-user-emacs-file "cursory-latest-state")
   "File to save the value of `cursory-set-preset'.
 Saving is done by the `cursory-store-latest-preset' function."
   :type 'file
