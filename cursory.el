@@ -153,7 +153,7 @@ Can be assigned to `kill-emacs-hook'."
 		  "lisp-data"
 		"emacs-lisp")
 	      " -*-\n"))
-      (pp (intern (car cursory--style-hist)) (current-buffer)))))
+      (pp (intern (car cursory--style-hist)) (current-buffer))))
 
 (defvar cursory-recovered-preset nil
   "Recovered value of latest store cursor preset.")
