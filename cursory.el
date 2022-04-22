@@ -1,11 +1,11 @@
 ;;; cursory.el --- Manage cursor styles using presets -*- lexical-binding: t -*-
 
-;; Copyright (C) 2022  Protesilaos Stavrou
+;; Copyright (C) 2022  Free Software Foundation, Inc.
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://git.sr.ht/~protesilaos/cursory
 ;; Mailing list: https://lists.sr.ht/~protesilaos/cursory
-;; Version: 0.1.3
+;; Version: 0.1.4
 ;; Package-Requires: ((emacs "27.1"))
 ;; Keywords: convenience, cursor
 
