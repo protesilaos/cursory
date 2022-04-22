@@ -167,10 +167,10 @@ Can be assigned to `kill-emacs-hook'."
   (when-let ((hist cursory--style-hist))
     (with-temp-file cursory-latest-state-file
       (insert ";; Auto-generated file; don't edit -*- mode: "
-	          (if (<= 28 emacs-major-version)
-		          "lisp-data"
-		        "emacs-lisp")
-	          " -*-\n")
+              (if (<= 28 emacs-major-version)
+                  "lisp-data"
+                "emacs-lisp")
+              " -*-\n")
       (pp (intern (car hist)) (current-buffer)))))
 
 (defvar cursory-recovered-preset nil
