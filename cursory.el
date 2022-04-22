@@ -85,7 +85,25 @@ They correspond to built-in variables of the same name:
 `blink-cursor-delay'.  The value each of them accepts is the same
 as the corresponding variable."
   :group 'cursory
-  :type 'alist) ; FIXME 2022-04-15: Make this usable in the Custom UI
+  :type `(alist
+          :value-type
+          (plist :options
+                 (((const :tag "Cursor type"
+                          :cursor-type)
+                   ,(get 'cursor-type 'custom-type))
+                  ((const :tag "Cursor in non-selected windows"
+                          :cursor-in-non-selected-windows)
+                   ,(get 'cursor-in-non-selected-windows 'custom-type))
+                  ((const :tag "Number of blinks"
+                          :blink-cursor-blinks)
+                   ,(get 'blink-cursor-blinks 'custom-type))
+                  ((const :tag "Blink interval"
+                          :blink-cursor-interval)
+                   ,(get 'blink-cursor-interval 'custom-type))
+                  ((const :tag "Blink delay"
+                          :blink-cursor-delay)
+                   ,(get 'blink-cursor-delay 'custom-type))))
+          :key-type symbol))
 
 (defcustom cursory-latest-state-file
   (locate-user-emacs-file "cursory-latest-state.eld")
