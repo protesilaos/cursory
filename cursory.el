@@ -5,7 +5,7 @@
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://git.sr.ht/~protesilaos/cursory
 ;; Mailing list: https://lists.sr.ht/~protesilaos/cursory
-;; Version: 0.1.2
+;; Version: 0.1.3
 ;; Package-Requires: ((emacs "27.1"))
 ;; Keywords: convenience, cursor
 
