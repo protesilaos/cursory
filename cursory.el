@@ -132,7 +132,12 @@ STYLE is a symbol that represents the car of a list in
 
 With optional LOCAL as a prefix argument, set the
 `cursory-presets' only for the current buffer."
-  (interactive (list (cursory--set-cursor-prompt) current-prefix-arg))
+  (interactive
+   (list
+    (if (= (length cursory-presets) 1)
+        (caar cursory-presets)
+      (cursory--set-cursor-prompt))
+    current-prefix-arg))
   (when-let* ((styles (if (stringp style) (intern style) style))
               (properties (alist-get styles cursory-presets))
               (type (plist-get properties :cursor-type))
