@@ -124,7 +124,7 @@ be restored with the ~cursory-restore-latest-preset~ function.
 :END:
 #+cindex: Installation instructions
 
-* GNU ELPA package
+** GNU ELPA package
 :PROPERTIES:
 :CUSTOM_ID: h:89989a9a-b5e2-48c9-bdc4-bb8aba11a79f
 :END:
