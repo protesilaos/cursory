@@ -164,13 +164,8 @@ Remember to read the doc string of each of these variables or functions.
 
 (setq cursory-latest-state-file (locate-user-emacs-file "cursory-latest-state"))
 
-(cursory-restore-latest-preset)
-
-;; Set `cursory-recovered-preset' or fall back to desired style from
-;; `cursory-presets'.
-(if cursory-recovered-preset
-    (cursory-set-preset cursory-recovered-preset)
-  (cursory-set-preset 'bar))
+;; Set last preset or fall back to desired style from `cursory-presets'.
+(cursory-set-preset (or (cursory-restore-latest-preset) 'bar))
 
 ;; The other side of `cursory-restore-latest-preset'.
 (add-hook 'kill-emacs-hook #'cursory-store-latest-preset)
@@ -190,7 +185,8 @@ Cursory is meant to be a collective effort.  Every bit of help matters.
 
 + Author/maintainer :: Protesilaos Stavrou.
 
-+ Contributions to the code or manual :: Philip Kaludercic, Stefan Monnier.
++ Contributions to the code or manual :: Christopher League, Philip
+  Kaludercic, Stefan Monnier.
 
 * GNU Free Documentation License
 :PROPERTIES:
