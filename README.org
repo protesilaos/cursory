@@ -223,6 +223,16 @@ Cursory is meant to be a collective effort.  Every bit of help matters.
 + Contributions to the code or manual :: Christopher League, Philip
   Kaludercic, Stefan Monnier.
 
+* Also see
+:PROPERTIES:
+:CUSTOM_ID: h:553e8270-749a-4382-b606-7fc604b9b984
+:END:
+
+The =electric-cursor= package by Case Duckworth lets the user
+automatically change the cursor style when a certain mode is activated.
+For example, the box is the default and switches to a bar when
+~overwrite-mode~ is on: https://github.com/duckwork/electric-cursor.
+
 * GNU Free Documentation License
 :PROPERTIES:
 :CUSTOM_ID: h:af16cb04-a07d-4236-b7e9-7759853a2bbc
