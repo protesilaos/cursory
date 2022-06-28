@@ -3,8 +3,8 @@
 ;; Copyright (C) 2022  Free Software Foundation, Inc.
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
+;; Maintainer: Cursory Development <~protesilaos/cursory@lists.sr.ht>
 ;; URL: https://git.sr.ht/~protesilaos/cursory
-;; Mailing list: https://lists.sr.ht/~protesilaos/cursory
 ;; Version: 0.1.4
 ;; Package-Requires: ((emacs "27.1"))
 ;; Keywords: convenience, cursor
