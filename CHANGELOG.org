@@ -9,6 +9,76 @@ project's main git repository: <https://sr.ht/~protesilaos/cursory>.
 The newest release is at the top.  For further details, please consult
 the manual: <https://protesilaos.com/emacs/cursory>.
 
+* Version 0.2.0 on 2022-07-01
+
+This is a stability release that introduces minor tweaks while
+formalising point releases which were already available to users.
+
++ When there is only one preset defined in the user option
+  ~cursory-presets~ the command ~cursory-set-preset~ will not prompt for
+  completion.  It will apply the sole preset outright.
+
++ Simplified the sample code in the manual for restoring the last preset
+  after starting Emacs.  The code is now written as follows:
+
+  #+begin_src emacs-lisp
+  ;; Set last preset or fall back to desired style from `cursory-presets'.
+  (cursory-set-preset (or (cursory-restore-latest-preset) 'bar))
+  #+end_src
+
+  Thanks to Christopher League for the original idea over at the
+  =fontaine= mailing list (Fontaine is another package of mine):
+  <https://lists.sr.ht/~protesilaos/fontaine/%3C87sfpop0dm.fsf@contrapunctus.net%3E#%3C87pmksoyv6.fsf@contrapunctus.net%3E>
+
++ Simplified the value of the ~cursory-presets~ user option.  It now
+  looks like this:
+
+  #+begin_src emacs-lisp
+  '((bar
+     :cursor-type (bar . 2)
+     :cursor-in-non-selected-windows hollow
+     :blink-cursor-blinks 10
+     :blink-cursor-interval 0.5
+     :blink-cursor-delay 0.2)
+    (box
+     :cursor-type box
+     :cursor-in-non-selected-windows hollow
+     :blink-cursor-blinks 10
+     :blink-cursor-interval 0.5
+     :blink-cursor-delay 0.2)
+    (underscore
+     :cursor-type (hbar . 3)
+     :cursor-in-non-selected-windows hollow
+     :blink-cursor-blinks 50
+     :blink-cursor-interval 0.2
+     :blink-cursor-delay 0.2))
+  #+end_src
+
+  Thanks to Philip Kaludercic for the patch.
+
++ Fixed the =:type= of the ~cursory-presets~ declaration.  The Custom UI
+  should now be able to read all values properly.  Courtesy of Philip
+  Kaludercic.
+
++ Named the mailing list address as the =Maintainer:= of Cursory.
+  Together with the other package headers, it helps the user find our
+  primary sources.  This is to conform with work being done in
+  package.el by Philip Kaludercic.  I was informed about it here:
+  <https://lists.sr.ht/~protesilaos/general-issues/%3C875ykl84yi.fsf%40posteo.net%3E>.
+
++ Included a reference to the "devel" version of GNU ELPA.  My blog post
+  covers the technicalities: https://protesilaos.com/codelog/2022-05-13-emacs-elpa-devel/.
+
++ Mentioned in the manual the =electric-cursor= package.  The text reads
+  thus:
+
+  #+begin_quote
+  The =electric-cursor= package by Case Duckworth lets the user
+  automatically change the cursor style when a certain mode is activated.
+  For example, the box is the default and switches to a bar when
+  ~overwrite-mode~ is on: https://github.com/duckwork/electric-cursor.
+  #+end_quote
+
 * Version 0.1.0 on 2022-04-15
 
 Initial release of the package.  Please read the manual.
