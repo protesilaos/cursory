@@ -77,28 +77,32 @@
   :group 'cursor)
 
 (defcustom cursory-presets
-  '((bar
+  '((box
+     :blink-cursor-interval 0.8)
+    (bar
      :cursor-type (bar . 2)
-     :cursor-in-non-selected-windows hollow
-     :blink-cursor-blinks 10
-     :blink-cursor-interval 0.5
-     :blink-cursor-delay 0.2)
-    (box
+     :blink-cursor-interval 0.5)
+    (underscore
+     :cursor-type (hbar . 3)
+     :blink-cursor-blinks 50)
+    (t ; the default values
      :cursor-type box
      :cursor-in-non-selected-windows hollow
      :blink-cursor-blinks 10
-     :blink-cursor-interval 0.5
-     :blink-cursor-delay 0.2)
-    (underscore
-     :cursor-type (hbar . 3)
-     :cursor-in-non-selected-windows hollow
-     :blink-cursor-blinks 50
      :blink-cursor-interval 0.2
      :blink-cursor-delay 0.2))
   "Alist of preset configurations for `blink-cursor-mode'.
 
 The car of each cons cell is an arbitrary, user-specified key
-that broadly describes the set.
+that broadly describes the set (e.g. slow-blinking-box or
+fast-blinking-bar).
+
+A preset whose car is t is treated as the default option.  This
+makes it possible to specify multiple presets without duplicating
+their properties.  The other presets beside t act as overrides of
+the defaults and, as such, need only consist of the properties
+that change from the default.  See the original value of this
+variable for how that is done.
 
 The cdr is a plist which specifies the cursor type and blink
 properties.  In particular, it accepts the following properties:
@@ -144,6 +148,20 @@ Saving is done by the `cursory-store-latest-preset' function."
 (defvar cursory--style-hist '()
   "Minibuffer history of `cursory--set-cursor-prompt'.")
 
+(defun cursory--preset-values (preset)
+  "Get properties of PRESET with relevant fallbacks."
+  (append (alist-get preset cursory-presets)
+          (alist-get t cursory-presets)))
+
+(defun cursory--presets-no-fallback ()
+  "Return list of `cursory-presets', minus the fallback value."
+  (delete
+   nil
+   (mapcar (lambda (symbol)
+             (unless (eq (car symbol) t)
+               symbol))
+           cursory-presets)))
+
 (defun cursory--set-cursor-prompt ()
   "Promp for `cursory-presets' (used by `cursory-set-preset')."
   (let* ((def (nth 1 cursory--style-hist))
@@ -151,8 +169,8 @@ Saving is done by the `cursory-store-latest-preset' function."
                      (format "Apply cursor configurations from PRESET [%s]: " def)
                    "Apply cursor configurations from PRESET: ")))
     (completing-read
-     (mapcar #'car cursory-presets)
      prompt
+     (cursory--presets-no-fallback)
      nil t nil 'cursory--style-hist def)))
 
 ;;;###autoload
@@ -171,7 +189,7 @@ With optional LOCAL as a prefix argument, set the
       (cursory--set-cursor-prompt))
     current-prefix-arg))
   (when-let* ((styles (if (stringp style) (intern style) style))
-              (properties (alist-get styles cursory-presets))
+              (properties (cursory--preset-values styles))
               (type (plist-get properties :cursor-type))
               (type-no-select (plist-get properties :cursor-in-non-selected-windows))
               (blinks (plist-get properties :blink-cursor-blinks))
