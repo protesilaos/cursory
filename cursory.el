@@ -146,10 +146,13 @@ Saving is done by the `cursory-store-latest-preset' function."
 
 (defun cursory--set-cursor-prompt ()
   "Promp for `cursory-presets' (used by `cursory-set-preset')."
-  (let ((def (nth 1 cursory--style-hist)))
+  (let* ((def (nth 1 cursory--style-hist))
+         (prompt (if def
+                     (format "Apply cursor configurations from PRESET [%s]: " def)
+                   "Apply cursor configurations from PRESET: ")))
     (completing-read
-     (format "Select cursor STYLE [%s]: " def)
      (mapcar #'car cursory-presets)
+     prompt
      nil t nil 'cursory--style-hist def)))
 
 ;;;###autoload
