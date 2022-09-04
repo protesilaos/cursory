@@ -144,6 +144,7 @@ them accepts is the same as the variable it references."
   "File to save the value of `cursory-set-preset'.
 Saving is done by the `cursory-store-latest-preset' function."
   :type 'file
+  :package-version '(cursory . "0.1.0")
   :group 'cursory)
 
 (defvar cursory--style-hist '()
