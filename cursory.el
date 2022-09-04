@@ -74,7 +74,8 @@
 
 (defgroup cursory ()
   "Manage cursor styles using presets."
-  :group 'cursor)
+  :group 'cursor
+  :link '(info-link "(cursory) Top"))
 
 (defcustom cursory-presets
   '((box
