@@ -80,6 +80,8 @@
 (defcustom cursory-presets
   '((box
      :blink-cursor-interval 0.8)
+    (box-no-blink
+     :blink-cursor-mode -1)
     (bar
      :cursor-type (bar . 2)
      :blink-cursor-interval 0.5)
@@ -89,6 +91,7 @@
     (t ; the default values
      :cursor-type box
      :cursor-in-non-selected-windows hollow
+     :blink-cursor-mode 1
      :blink-cursor-blinks 10
      :blink-cursor-interval 0.2
      :blink-cursor-delay 0.2))
@@ -117,7 +120,11 @@ properties.  In particular, it accepts the following properties:
 They correspond to built-in variables: `cursor-type',
 `cursor-in-non-selected-windows', `blink-cursor-blinks',
 `blink-cursor-interval', `blink-cursor-delay'.  The value each of
-them accepts is the same as the variable it references."
+them accepts is the same as the variable it references.
+
+A property of `:blink-cursor-mode' is also available.  It is a
+numeric value of either 1 or -1 and is given to the function
+`blink-cursor-mode' (1 is to enable, -1 is to disable the mode)."
   :group 'cursory
   :package-version '(cursory . "0.3.0")
   :type `(alist
@@ -137,7 +144,12 @@ them accepts is the same as the variable it references."
                    ,(get 'blink-cursor-interval 'custom-type))
                   ((const :tag "Blink delay"
                           :blink-cursor-delay)
-                   ,(get 'blink-cursor-delay 'custom-type))))
+                   ,(get 'blink-cursor-delay 'custom-type))
+                  ((const :tag "Blink Cursor Mode"
+                          :blink-cursor-mode)
+                   (choice :value 1
+                           (const :tag "Enable" 1)
+                           (const :tag "Disable" -1)))))
           :key-type symbol))
 
 (defcustom cursory-latest-state-file
@@ -184,7 +196,8 @@ STYLE is a symbol that represents the car of a list in
 `cursory-presets'.
 
 With optional LOCAL as a prefix argument, set the
-`cursory-presets' only for the current buffer."
+`cursory-presets' only for the current buffer.  This does not
+cover the function `blink-cursor-mode', which is always global."
   (interactive
    (list
     (if (= (length cursory-presets) 1)
@@ -213,6 +226,7 @@ With optional LOCAL as a prefix argument, set the
                     blink-cursor-blinks blinks
                     blink-cursor-interval interval
                     blink-cursor-delay delay))
+    (blink-cursor-mode (plist-get properties :blink-cursor-mode))
     ;; We only want to save global values in
     ;; `cursory-store-latest-preset'.
     (unless local
