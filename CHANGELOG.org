@@ -10,6 +10,9 @@ The newest release is at the top.  For further details, please consult
 the manual: <https://protesilaos.com/emacs/cursory>.
 
 * Version 0.3.0 on 2022-09-04
+:PROPERTIES:
+:CUSTOM_ID: h:ca7dd1d2-f32c-4141-b9bb-9493457dd4e1
+:END:
 
 + Implemented a mechanism to read fallback values for the presets
   specified in the user option ~cursory-presets~.  In practical terms,
@@ -60,6 +63,9 @@ the manual: <https://protesilaos.com/emacs/cursory>.
   GNU ELPA package.  A link is shown in Custom UI buffers.
 
 * Version 0.2.0 on 2022-07-01
+:PROPERTIES:
+:CUSTOM_ID: h:76673384-4888-4160-b4fe-b294e78c54ac
+:END:
 
 This is a stability release that introduces minor tweaks while
 formalising point releases which were already available to users.
@@ -130,6 +136,9 @@ formalising point releases which were already available to users.
   #+end_quote
 
 * Version 0.1.0 on 2022-04-15
+:PROPERTIES:
+:CUSTOM_ID: h:750618bd-d3ea-4eac-a061-95d3120d5f6e
+:END:
 
 Initial release of the package.  Please read the manual.
 
