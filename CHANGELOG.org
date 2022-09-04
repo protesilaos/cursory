@@ -9,6 +9,56 @@ project's main git repository: <https://sr.ht/~protesilaos/cursory>.
 The newest release is at the top.  For further details, please consult
 the manual: <https://protesilaos.com/emacs/cursory>.
 
+* Version 0.3.0 on 2022-09-04
+
++ Implemented a mechanism to read fallback values for the presets
+  specified in the user option ~cursory-presets~.  In practical terms,
+  there can now be a =t= preset which holds the default values.  Any
+  other named preset overrides the =t=, so it only needs to specify the
+  properties that differ from the defaults.  Sample using the original
+  value:
+
+  #+begin_src emacs-lisp
+  (setq cursory-presets
+        '((box
+           :blink-cursor-interval 0.8)
+          (box-no-blink
+           :blink-cursor-mode -1)
+          (bar
+           :cursor-type (bar . 2)
+           :blink-cursor-interval 0.5)
+          (underscore
+           :cursor-type (hbar . 3)
+           :blink-cursor-blinks 50)
+          (t ; the default values
+           :cursor-type box
+           :cursor-in-non-selected-windows hollow
+           :blink-cursor-mode 1
+           :blink-cursor-blinks 10
+           :blink-cursor-interval 0.2
+           :blink-cursor-delay 0.2)))
+  #+end_src
+
++ Expanded the available properties of the user option ~cursory-presets~
+  to accept a value for the =:blink-cursor-mode= key (as seen in the
+  above code block).  It is either =1= or =-1= and is passed to the
+  function ~blink-cursor-mode~.  The former value enables the mode, the
+  latter disables it.  This lets ~cursory-presets~ set the
+  ~blink-cursor-mode~ per stylistic variant.
+
++ Refined the default value of the minibuffer prompt that is used by the
+  command ~cursory-set-preset~.  The default value now is the previous
+  element in the history, if it exists.  This makes it easier to toggle
+  between the last two choices (select the default value simply by
+  pressing =RET= without any further input).
+
++ Specified a =:package-version= for all user options.  The user is
+  informed in relevant Help buffers about the last version that
+  introduced or iterated on the variable.
+
++ The =cursory= group now references the Info manual that ships with the
+  GNU ELPA package.  A link is shown in Custom UI buffers.
+
 * Version 0.2.0 on 2022-07-01
 
 This is a stability release that introduces minor tweaks while

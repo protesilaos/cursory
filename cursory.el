@@ -6,7 +6,7 @@
 ;; Maintainer: Cursory Development <~protesilaos/cursory@lists.sr.ht>
 ;; URL: https://git.sr.ht/~protesilaos/cursory
 ;; Mailing-List: https://lists.sr.ht/~protesilaos/cursory
-;; Version: 0.2.1
+;; Version: 0.3.0
 ;; Package-Requires: ((emacs "27.1"))
 ;; Keywords: convenience, cursor
 
