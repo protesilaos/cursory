@@ -119,6 +119,7 @@ They correspond to built-in variables: `cursor-type',
 `blink-cursor-interval', `blink-cursor-delay'.  The value each of
 them accepts is the same as the variable it references."
   :group 'cursory
+  :package-version '(cursory . "0.3.0")
   :type `(alist
           :value-type
           (plist :options
