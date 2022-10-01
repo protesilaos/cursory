@@ -14,7 +14,7 @@
 #+texinfo_filename:      cursory.info
 #+texinfo_dir_category:  Emacs misc features
 #+texinfo_dir_title:     Cursory: (cursory)
-#+texinfo_dir_desc:      Pulse highlight line on demand or after running select functions
+#+texinfo_dir_desc:      Manage cursor styles using presets
 #+texinfo_header:        @set MAINTAINERSITE @uref{https://protesilaos.com,maintainer webpage}
 #+texinfo_header:        @set MAINTAINER Protesilaos Stavrou
 #+texinfo_header:        @set MAINTAINEREMAIL @email{info@protesilaos.com}
