@@ -1,6 +1,6 @@
 ;;; cursory.el --- Manage cursor styles using presets -*- lexical-binding: t -*-
 
-;; Copyright (C) 2022  Free Software Foundation, Inc.
+;; Copyright (C) 2022-2023  Free Software Foundation, Inc.
 
 ;; Author: Protesilaos Stavrou <info@protesilaos.com>
 ;; Maintainer: Cursory Development <~protesilaos/cursory@lists.sr.ht>
