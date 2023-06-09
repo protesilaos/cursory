@@ -28,22 +28,27 @@
 ;;; Commentary:
 ;;
 ;; Cursory provides a thin wrapper around built-in variables that affect
-;; the style of the Emacs cursor on graphical terminals.  The intent is to
-;; allow the user to define preset configurations such as "block with slow
-;; blinking" or "bar with fast blinking" and set them on demand.
+;; the style of the Emacs cursor on graphical terminals.  The intent is
+;; to allow the user to define preset configurations such as "block with
+;; slow blinking" or "bar with fast blinking" and set them on demand.
+;; The use-case for such presets is to adapt to evolving interface
+;; requirements and concomitant levels of expected comfort, such as in
+;; the difference between writing and reading.
 ;;
 ;; The user option `cursory-presets' holds the presets.  The command
-;; `cursory-set-preset' is used to select one among them.  Selection
-;; supports minibuffer completion when there are multiple presets, else
-;; sets the single preset outright.
+;; `cursory-set-preset' is applies one among them.  The command supports
+;; minibuffer completion when there are multiple presets, else sets the
+;; single preset outright.
 ;;
-;; Presets consist of a list of properties that govern the cursor type in
-;; the active and inactive windows, as well as cursor blinking variables.
+;; Presets consist of an arbitrary symbol broadly described the style set
+;; followed by a list of properties that govern the cursor type in the
+;; active and inactive windows, as well as cursor blinking variables.
 ;; They look like this:
 ;;
 ;;     (bar
 ;;      :cursor-type (bar . 2)
 ;;      :cursor-in-non-selected-windows hollow
+;;      :blink-cursor-mode 1
 ;;      :blink-cursor-blinks 10
 ;;      :blink-cursor-interval 0.5
 ;;      :blink-cursor-delay 0.2)
@@ -57,14 +62,39 @@
 ;;
 ;; A property of `:blink-cursor-mode' is also available.  It is a numeric
 ;; value of either `1' or `-1' and is given to the function
-;; `blink-cursor-mode' (`1' is to enable, `-1' is to disable the mode).
+;; `blink-cursor-mode': `1' is to enable, `-1' is to disable the mode.
 ;;
-;; A preset whose car is `t' is treated as the default option.  This makes
-;; it possible to specify multiple presets without duplicating their
-;; properties.  The other presets beside `t' act as overrides of the
-;; defaults and, as such, need only consist of the properties that change
-;; from the default.  See the original value of this variable for how that
-;; is done:
+;; Presets can inherit from each other.  Using the special `:inherit'
+;; property, like this:
+;;
+;;     (bar
+;;      :cursor-type (bar . 2)
+;;      :cursor-in-non-selected-windows hollow
+;;      :blink-cursor-mode 1
+;;      :blink-cursor-blinks 10
+;;      :blink-cursor-interval 0.5
+;;      :blink-cursor-delay 0.2)
+;;
+;;     (bar-no-other-window
+;;      :inherit bar
+;;      :cursor-in-non-selected-windows nil)
+;;
+;; In the above example, the `bar-no-other-window' is the same as `bar'
+;; except for the value of `:cursor-in-non-selected-windows'.
+;;
+;; The value given to the `:inherit' property corresponds to the name of
+;; another named preset (unquoted).  This tells the relevant Cursory
+;; functions to get the properties of that given preset and blend them
+;; with those of the current one.  The properties of the current preset
+;; take precedence over those of the inherited one, thus overriding them.
+;;
+;; A preset whose car is `t' is treated as the default option.  This
+;; makes it possible to specify multiple presets without duplicating
+;; their properties.  The other presets beside `t' act as overrides of
+;; the defaults and, as such, need only consist of the properties that
+;; change from the default.  In the case of an `:inherit', properties are
+;; first taken from the inherited preset and then the default one.  See
+;; the original value of this variable for how that is done:
 ;;
 ;;     (defcustom cursory-presets
 ;;       '((box
@@ -74,9 +104,15 @@
 ;;         (bar
 ;;          :cursor-type (bar . 2)
 ;;          :blink-cursor-interval 0.5)
+;;         (bar-no-other-window
+;;          :inherit bar
+;;          :cursor-in-non-selected-windows nil)
 ;;         (underscore
 ;;          :cursor-type (hbar . 3)
 ;;          :blink-cursor-blinks 50)
+;;         (underscore-thin-other-window
+;;          :inherit underscore
+;;          :cursor-in-non-selected-windows (hbar . 1))
 ;;         (t ; the default values
 ;;          :cursor-type box
 ;;          :cursor-in-non-selected-windows hollow
@@ -96,7 +132,9 @@
 ;; globally.  The user can, however, limit the effect to the current
 ;; buffer.  With interactive use, this is done by invoking the command with
 ;; a universal prefix argument (`C-u' by default).  When called from Lisp,
-;; the LOCAL argument must be non-nil.
+;; the LOCAL argument must be non-nil, thus:
+;;
+;;     (cursory-set-preset 'bar :local)
 ;;
 ;; The function `cursory-store-latest-preset' is used to save the last
 ;; selected style in the `cursory-latest-state-file'.  The value can then
@@ -117,9 +155,15 @@
     (bar
      :cursor-type (bar . 2)
      :blink-cursor-interval 0.5)
+    (bar-no-other-window
+     :inherit bar
+     :cursor-in-non-selected-windows nil)
     (underscore
      :cursor-type (hbar . 3)
      :blink-cursor-blinks 50)
+    (underscore-thin-other-window
+     :inherit underscore
+     :cursor-in-non-selected-windows (hbar . 1))
     (t ; the default values
      :cursor-type box
      :cursor-in-non-selected-windows hollow
@@ -140,7 +184,7 @@ the defaults and, as such, need only consist of the properties
 that change from the default.  See the original value of this
 variable for how that is done.
 
-The cdr is a plist which specifies the cursor type and blink
+The `cdr' is a plist which specifies the cursor type and blink
 properties.  In particular, it accepts the following properties:
 
     :cursor-type
@@ -156,9 +200,23 @@ them accepts is the same as the variable it references.
 
 A property of `:blink-cursor-mode' is also available.  It is a
 numeric value of either 1 or -1 and is given to the function
-`blink-cursor-mode' (1 is to enable, -1 is to disable the mode)."
+`blink-cursor-mode' (1 is to enable, -1 is to disable the mode).
+
+Finally, the plist takes the special `:inherit' property.  Its
+value is contains the name of another named preset (unquoted).
+This tells the relevant Cursory functions to get the properties
+of that given preset and blend them with those of the current
+one.  The properties of the current preset take precedence over
+those of the inherited one, thus overriding them.  In practice,
+this is a way to have something like an underscore style with a
+hallow cursor for the other window and the same with a thin
+underscore for the other window (see the default value of this
+user option for concrete examples).  Remember that all named
+presets fall back to the preset whose name is t.  The `:inherit'
+is not a substitute for that generic fallback but rather an extra
+method of specifying font configuration presets."
   :group 'cursory
-  :package-version '(cursory . "0.3.0")
+  :package-version '(cursory . "1.0.0")
   :type `(alist
           :value-type
           (plist :options
@@ -181,7 +239,8 @@ numeric value of either 1 or -1 and is given to the function
                           :blink-cursor-mode)
                    (choice :value 1
                            (const :tag "Enable" 1)
-                           (const :tag "Disable" -1)))))
+                           (const :tag "Disable" -1)))
+                  ((const :tag "Inherit another preset" :inherit) symbol)))
           :key-type symbol))
 
 (defcustom cursory-latest-state-file
@@ -195,19 +254,31 @@ Saving is done by the `cursory-store-latest-preset' function."
 (defvar cursory--style-hist '()
   "Minibuffer history of `cursory--set-cursor-prompt'.")
 
-(defun cursory--preset-values (preset)
-  "Get properties of PRESET with relevant fallbacks."
-  (append (alist-get preset cursory-presets)
-          (alist-get t cursory-presets)))
+(defun cursory--preset-p (preset)
+  "Return non-nil if PRESET is one of the named `cursory-presets'."
+  (let ((presets (delq t (mapcar #'car cursory-presets))))
+    (memq preset presets)))
+
+(defun cursory--get-inherit-name (preset)
+  "Get the `:inherit' value of PRESET."
+  (when-let* ((inherit (plist-get (alist-get preset cursory-presets) :inherit))
+              (cursory--preset-p inherit))
+    inherit))
+
+(defun cursory--get-preset-properties (preset)
+  "Return list of properties for PRESET in `cursory-presets'."
+  (let ((presets cursory-presets))
+    (append (alist-get preset presets)
+            (when-let ((inherit (cursory--get-inherit-name preset)))
+              (alist-get inherit presets))
+            (alist-get t presets))))
 
 (defun cursory--presets-no-fallback ()
   "Return list of `cursory-presets', minus the fallback value."
-  (delete
-   nil
-   (mapcar (lambda (symbol)
-             (unless (eq (car symbol) t)
-               symbol))
-           cursory-presets)))
+  (seq-remove
+   (lambda (symbol)
+     (eq (car symbol) t))
+   cursory-presets))
 
 (defun cursory--set-cursor-prompt ()
   "Promp for `cursory-presets' (used by `cursory-set-preset')."
@@ -220,6 +291,48 @@ Saving is done by the `cursory-store-latest-preset' function."
      (cursory--presets-no-fallback)
      nil t nil 'cursory--style-hist def)))
 
+(defun cursory--get-preset-as-symbol (preset)
+  "Return PRESET as a symbol."
+  (if (stringp preset)
+      (intern preset)
+    preset))
+
+(defun cursory--delete-local-variables ()
+  "Delete all cursor-related local variables."
+  (dolist (var '( cursor-type cursor-in-non-selected-windows
+                  blink-cursor-blinks blink-cursor-interval
+                  blink-cursor-delay))
+    (kill-local-variable var)))
+
+(defun cursory--set-preset-with-scope (preset &optional local)
+  "Set PRESET of `cursory-presets' to the global scope.
+With optional non-nil LOCAL, set STYLES scoped locally to the
+current buffer."
+  (if-let ((styles (cursory--get-preset-properties preset)))
+      ;; We do not include this in the `if-let' because we also accept
+      ;; nil values for :cursor-type, :cursor-in-non-selected-windows.
+      (let ((type (plist-get styles :cursor-type))
+            (type-no-select (plist-get styles :cursor-in-non-selected-windows))
+            (blinks (plist-get styles :blink-cursor-blinks))
+            (interval (plist-get styles :blink-cursor-interval))
+            (delay (plist-get styles :blink-cursor-delay)))
+        (if local
+            (setq-local cursor-type type
+                        cursor-in-non-selected-windows type-no-select
+                        blink-cursor-blinks blinks
+                        blink-cursor-interval interval
+                        blink-cursor-delay delay)
+          (cursory--delete-local-variables)
+          (setq-default cursor-type type
+                        cursor-in-non-selected-windows type-no-select
+                        blink-cursor-blinks blinks
+                        blink-cursor-interval interval
+                        blink-cursor-delay delay)
+          ;; We only want to save global values in `cursory-store-latest-preset'.
+          (add-to-history 'cursory--style-hist (format "%s" preset)))
+        (blink-cursor-mode (plist-get styles :blink-cursor-mode)))
+    (user-error "Cannot determine styles of preset `%s'" preset)))
+
 ;;;###autoload
 (defun cursory-set-preset (style &optional local)
   "Set cursor preset associated with STYLE.
@@ -229,40 +342,14 @@ STYLE is a symbol that represents the car of a list in
 
 With optional LOCAL as a prefix argument, set the
 `cursory-presets' only for the current buffer.  This does not
-cover the function `blink-cursor-mode', which is always global."
+cover the `blink-cursor-mode', which is always global."
   (interactive
    (list
-    (if (= (length cursory-presets) 1)
-        (caar cursory-presets)
-      (cursory--set-cursor-prompt))
+    (cursory--set-cursor-prompt)
     current-prefix-arg))
-  (when-let* ((styles (if (stringp style) (intern style) style))
-              (properties (cursory--preset-values styles))
-              (type (plist-get properties :cursor-type))
-              (type-no-select (plist-get properties :cursor-in-non-selected-windows))
-              (blinks (plist-get properties :blink-cursor-blinks))
-              (interval (plist-get properties :blink-cursor-interval))
-              (delay (plist-get properties :blink-cursor-delay)))
-    (if local
-        (setq-local cursor-type type
-                    cursor-in-non-selected-windows type-no-select
-                    blink-cursor-blinks blinks
-                    blink-cursor-interval interval
-                    blink-cursor-delay delay)
-      (dolist (var '( cursor-type cursor-in-non-selected-windows
-                      blink-cursor-blinks blink-cursor-interval
-                      blink-cursor-delay))
-        (kill-local-variable var))
-      (setq-default cursor-type type
-                    cursor-in-non-selected-windows type-no-select
-                    blink-cursor-blinks blinks
-                    blink-cursor-interval interval
-                    blink-cursor-delay delay))
-    (blink-cursor-mode (plist-get properties :blink-cursor-mode))
-    ;; We only want to save global values in
-    ;; `cursory-store-latest-preset'.
-    (unless local
-      (add-to-history 'cursory--style-hist (format "%s" style)))))
+  (if-let ((preset (cursory--get-preset-as-symbol style)))
+      (cursory--set-preset-with-scope preset local)
+    (user-error "Cannot determine preset `%s'" preset)))
 
 ;;;###autoload
 (defun cursory-store-latest-preset ()
