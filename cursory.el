@@ -90,11 +90,11 @@
 ;;
 ;; A preset whose car is `t' is treated as the default option.  This
 ;; makes it possible to specify multiple presets without duplicating
-;; their properties.  The other presets beside `t' act as overrides of
-;; the defaults and, as such, need only consist of the properties that
-;; change from the default.  In the case of an `:inherit', properties are
-;; first taken from the inherited preset and then the default one.  See
-;; the original value of this variable for how that is done:
+;; their properties.  Presets beside `t' act as overrides of the
+;; defaults and, as such, need only consist of the properties that
+;; change from the default.  In the case of an `:inherit', properties
+;; are first taken from the inherited preset and then the default one.
+;; See the original value of this variable for how that is done:
 ;;
 ;;     (defcustom cursory-presets
 ;;       '((box

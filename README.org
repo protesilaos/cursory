@@ -114,16 +114,22 @@ Presets can inherit from each other.  Using the special =:inherit=
 property, like this:
 
 #+begin_src emacs-lisp
-(bar
- :cursor-type (bar . 2)
- :cursor-in-non-selected-windows hollow
- :blink-cursor-mode 1
- :blink-cursor-blinks 10
- :blink-cursor-interval 0.5
- :blink-cursor-delay 0.2)
-(bar-no-other-window
- :inherit bar
- :cursor-in-non-selected-windows nil)
+(setq cursory-presets
+      '(
+        ;; Sample code here ...
+        (bar
+         :cursor-type (bar . 2)
+         :cursor-in-non-selected-windows hollow
+         :blink-cursor-mode 1
+         :blink-cursor-blinks 10
+         :blink-cursor-interval 0.5
+         :blink-cursor-delay 0.2)
+
+        (bar-no-other-window
+         :inherit bar
+         :cursor-in-non-selected-windows nil)
+        ;; More sample code here ...
+        ))
 #+end_src
 
 In the above example, the =bar-no-other-window= is the same as =bar=
@@ -137,11 +143,11 @@ take precedence over those of the inherited one, thus overriding them.
 
 A preset whose car is =t= is treated as the default option.  This
 makes it possible to specify multiple presets without duplicating
-their properties.  The other presets beside =t= act as overrides of
-the defaults and, as such, need only consist of the properties that
-change from the default.  In the case of an =:inherit=, properties are
-first taken from the inherited preset and then the default one.  See
-the original value of this variable for how that is done:
+their properties.  Presets beside =t= act as overrides of the defaults
+and, as such, need only consist of the properties that change from the
+default.  In the case of an =:inherit=, properties are first taken
+from the inherited preset and then the default one.  See the original
+value of this variable for how that is done:
 
 #+begin_src emacs-lisp
 (defcustom cursory-presets
