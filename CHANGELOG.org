@@ -9,6 +9,88 @@ project's main git repository: <https://sr.ht/~protesilaos/cursory>.
 The newest release is at the top.  For further details, please consult
 the manual: <https://protesilaos.com/emacs/cursory>.
 
+* Version 1.0.0 on 2023-06-09
+:PROPERTIES:
+:CUSTOM_ID: h:9fed228e-cde0-4d23-952a-937301b82b22
+:END:
+
+Cursory has been in a stable state for a long time.  I use it daily
+and am happy with what it does.  This version refactors parts of the
+code in the interest of legibility/hackability, while providing a
+quality-of-life feature for users.
+
+** A preset can now inherit from another
+:PROPERTIES:
+:CUSTOM_ID: h:d559a5c7-dfec-40f6-9b48-160424de2fed
+:END:
+
+In the interest of defining multiple presets while avoiding
+duplication, the user option ~cursory-presets~ now accepts an
+=:inherit= property.  For example:
+
+#+begin_src emacs-lisp
+(setq cursory-presets
+      '(
+        ;; Sample code here ...
+
+        (bar
+         :cursor-type (bar . 2)
+         :cursor-in-non-selected-windows hollow
+         :blink-cursor-mode 1
+         :blink-cursor-blinks 10
+         :blink-cursor-interval 0.5
+         :blink-cursor-delay 0.2)
+
+        (bar-no-other-window
+         :inherit bar
+         :cursor-in-non-selected-windows nil)
+
+        ;; More sample code here ...
+        ))
+#+end_src
+
+Presets were already capable of getting properties from a default =t=
+preset.  Now they can be controlled with greater precision.
+
+The value of ~cursory-presets~ is updated accordingly to benefit from
+this mechanism and to showcase how it is done:
+
+#+begin_src emacs-lisp
+(defcustom cursory-presets
+  '((box
+     :blink-cursor-interval 0.8)
+    (box-no-blink
+     :blink-cursor-mode -1)
+    (bar
+     :cursor-type (bar . 2)
+     :blink-cursor-interval 0.5)
+    (bar-no-other-window
+     :inherit bar
+     :cursor-in-non-selected-windows nil)
+    (underscore
+     :cursor-type (hbar . 3)
+     :blink-cursor-blinks 50)
+    (underscore-thin-other-window
+     :inherit underscore
+     :cursor-in-non-selected-windows (hbar . 1))
+    (t ; the default values
+     :cursor-type box
+     :cursor-in-non-selected-windows hollow
+     :blink-cursor-mode 1
+     :blink-cursor-blinks 10
+     :blink-cursor-interval 0.2
+     :blink-cursor-delay 0.2))
+  ;; Omitting the doc string for demo purposes...
+  )
+#+end_src
+
+In the above sample, we notice both the =:inherit= property and the
+default =t= preset with all its properties.  Presets beside =t= act as
+overrides of the defaults and, as such, need only consist of the
+properties that change from the default.  In the case of an
+=:inherit=, properties are first taken from the inherited preset and
+then the default one.
+
 * Version 0.3.0 on 2022-09-04
 :PROPERTIES:
 :CUSTOM_ID: h:ca7dd1d2-f32c-4141-b9bb-9493457dd4e1
