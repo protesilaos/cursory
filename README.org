@@ -47,6 +47,7 @@ Current development target is {{{development-version}}}.
 
 * COPYING
 :PROPERTIES:
+:COPYING: t
 :CUSTOM_ID: h:acadd212-7168-48b2-aded-f257d5fafeb3
 :END:
 
@@ -778,16 +779,19 @@ to permit their use in free software.
 
 ** Function index
 :PROPERTIES:
+:INDEX: fn
 :CUSTOM_ID: h:01120471-a610-449f-87a8-65e60d30a37b
 :END:
 
 ** Variable index
 :PROPERTIES:
+:INDEX: vr
 :CUSTOM_ID: h:069fc5e0-f487-4430-a41c-47d8540e7b42
 :END:
 
 ** Concept index
 :PROPERTIES:
+:INDEX: cp
 :CUSTOM_ID: h:efef3d9a-f9c7-4184-a64c-7e0033192fb5
 :END:
 
