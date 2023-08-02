@@ -294,8 +294,8 @@ Cursory is meant to be a collective effort.  Every bit of help matters.
 
 + Author/maintainer :: Protesilaos Stavrou.
 
-+ Contributions to the code or manual :: Christopher League, Philip
-  Kaludercic, Stefan Monnier.
++ Contributions to the code or manual :: Christopher League, Mehdi
+  Khawari, Nicholas Vollmer, Philip Kaludercic, Stefan Monnier.
 
 * Also see
 :PROPERTIES:

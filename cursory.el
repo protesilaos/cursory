@@ -142,6 +142,8 @@
 
 ;;; Code:
 
+(eval-when-compile (require 'subr-x))
+
 (defgroup cursory ()
   "Manage cursor styles using presets."
   :group 'cursor
