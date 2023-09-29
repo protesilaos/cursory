@@ -253,6 +253,12 @@ Saving is done by the `cursory-store-latest-preset' function."
   :package-version '(cursory . "0.1.0")
   :group 'cursory)
 
+(defcustom cursory-set-preset-hook nil
+  "Normal hook that runs after `cursory-set-preset'."
+  :type 'hook
+  :package-version '(cursory . "1.1.0")
+  :group 'cursory)
+
 (defvar cursory--style-hist '()
   "Minibuffer history of `cursory--set-cursor-prompt'.")
 
@@ -332,7 +338,8 @@ current buffer."
                         blink-cursor-delay delay)
           ;; We only want to save global values in `cursory-store-latest-preset'.
           (add-to-history 'cursory--style-hist (format "%s" preset)))
-        (blink-cursor-mode (plist-get styles :blink-cursor-mode)))
+        (blink-cursor-mode (plist-get styles :blink-cursor-mode))
+        (run-hooks 'cursory-set-preset-hook))
     (user-error "Cannot determine styles of preset `%s'" preset)))
 
 ;;;###autoload

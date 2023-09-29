@@ -85,6 +85,12 @@ The user option ~cursory-presets~ holds the presets.  The command
 minibuffer completion when there are multiple presets, else sets the
 single preset outright.
 
+#+vindex: cursory-set-preset-hook
+The ~cursory-set-preset~ comman calls the ~cursory-set-preset-hook~
+as its final step.  Use this to run other functions after changing the
+cursor (e.g. a function that checks the style Cursory used to apply an
+appropriate color). [ This hook is part of {{{development-version}}}. ]
+
 Presets consist of an arbitrary symbol broadly described the style set
 followed by a list of properties that govern the cursor type in the
 active and inactive windows, as well as cursor blinking variables.
