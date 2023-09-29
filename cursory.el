@@ -351,7 +351,9 @@ STYLE is a symbol that represents the car of a list in
 
 With optional LOCAL as a prefix argument, set the
 `cursory-presets' only for the current buffer.  This does not
-cover the `blink-cursor-mode', which is always global."
+cover the `blink-cursor-mode', which is always global.
+
+Call `cursory-set-preset-hook' as a final step."
   (interactive
    (list
     (cursory--set-cursor-prompt)
