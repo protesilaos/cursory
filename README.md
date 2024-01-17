@@ -11,9 +11,7 @@ the difference between writing and reading.
 + Package name (GNU ELPA): `cursory`
 + Official manual: <https://protesilaos.com/emacs/cursory>
 + Change log: <https://protesilaos.com/emacs/cursory-changelog>
-+ Git repo on SourceHut: <https://git.sr.ht/~protesilaos/cursory>
-  - Mirrors:
-    + GitHub: <https://github.com/protesilaos/cursory>
-    + GitLab: <https://gitlab.com/protesilaos/cursory>
-+ Mailing list: <https://lists.sr.ht/~protesilaos/cursory>
-+ Backronym: Cursor Usability Requires Styles Objectively Rated Yearlong
++ Git repositories:
+  + GitHub: <https://github.com/protesilaos/cursory>
+  + GitLab: <https://gitlab.com/protesilaos/cursory>
++ Backronym: Cursor Usability Requires Styles Objectively Rated Yearlong.
