@@ -390,5 +390,18 @@ Can be assigned to `kill-emacs-hook'."
               (insert-file-contents file)
               (read (current-buffer)))))))
 
+;;;###autoload
+(define-minor-mode cursory-mode
+  "Persist Cursory presets.
+Arrange to store and restore the current Cursory preset when
+closing and restarting Emacs."
+  :global t
+  (if cursory-mode
+      (progn
+        (add-hook 'kill-emacs-hook #'cursory-store-latest-preset)
+        (add-hook 'cursory-set-preset-hook #'cursory-store-latest-preset))
+    (remove-hook 'kill-emacs-hook #'cursory-store-latest-preset)
+    (remove-hook 'cursory-set-preset-hook #'cursory-store-latest-preset)))
+
 (provide 'cursory)
 ;;; cursory.el ends here

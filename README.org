@@ -209,6 +209,12 @@ be restored with the ~cursory-restore-latest-preset~ function.
 
 [[#h:b3c38cda-48d3-4715-9c46-6b9844a6da86][Sample configuration]].
 
+[ The following is part of {{{development-version}}}. ]
+
+Instead of manually storing the latest Cursory preset, users can
+enable the ~cursory-mode~. It arranges to track the latest preset
+after using ~cursory-set-preset~ or closing Emacs.
+
 * Installation
 :PROPERTIES:
 :CUSTOM_ID: h:6dd596f2-d98b-4275-b25e-495e2a0616bf
@@ -280,8 +286,8 @@ Remember to read the doc string of each of these variables or functions.
 ;; Set last preset or fall back to desired style from `cursory-presets'.
 (cursory-set-preset (or (cursory-restore-latest-preset) 'bar))
 
-;; The other side of `cursory-restore-latest-preset'.
-(add-hook 'kill-emacs-hook #'cursory-store-latest-preset)
+;; Arrange to keep track of the latest Cursory preset.
+(cursory-mode 1)
 
 ;; We have to use the "point" mnemonic, because C-c c is often the
 ;; suggested binding for `org-capture'.
