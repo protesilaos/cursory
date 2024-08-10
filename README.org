@@ -84,7 +84,7 @@ minibuffer completion when there are multiple presets, else sets the
 single preset outright.
 
 #+vindex: cursory-set-preset-hook
-The ~cursory-set-preset~ comman calls the ~cursory-set-preset-hook~
+The ~cursory-set-preset~ command calls the ~cursory-set-preset-hook~
 as its final step.  Use this to run other functions after changing the
 cursor (e.g. a function that checks the style Cursory used to apply an
 appropriate color). [ This hook is part of {{{development-version}}}. ]
