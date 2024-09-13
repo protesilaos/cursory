@@ -256,7 +256,7 @@ mkdir manual-packages
 cd manual-packages
 
 # Clone this repo, naming it "cursory"
-git clone https://git.sr.ht/~protesilaos/cursory cursory
+git clone https://github.com/protesilaos/cursory cursory
 #+end_src
 
 Finally, in your =init.el= (or equivalent) evaluate this:
