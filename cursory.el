@@ -311,6 +311,9 @@ Saving is done by the `cursory-store-latest-preset' function."
                   blink-cursor-delay))
     (kill-local-variable var)))
 
+(defvar cursory-last-selected-preset nil
+  "The last value of `cursory-set-preset'.")
+
 (defun cursory--set-preset-with-scope (preset &optional local)
   "Set PRESET of `cursory-presets' to the global scope.
 With optional non-nil LOCAL, set STYLES scoped locally to the
@@ -323,6 +326,7 @@ current buffer."
             (blinks (plist-get styles :blink-cursor-blinks))
             (interval (plist-get styles :blink-cursor-interval))
             (delay (plist-get styles :blink-cursor-delay)))
+        (setq cursory-last-selected-preset preset)
         (if local
             (setq-local cursor-type type
                         cursor-in-non-selected-windows type-no-select
