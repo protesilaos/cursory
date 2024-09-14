@@ -212,8 +212,8 @@ be restored with the ~cursory-restore-latest-preset~ function.
 [ The following is part of {{{development-version}}}. ]
 
 Instead of manually storing the latest Cursory preset, users can
-enable the ~cursory-mode~. It arranges to track the latest preset
-after using ~cursory-set-preset~ or closing Emacs.
+enable the ~cursory-mode~. It arranges to track the latest preset each
+time after using ~cursory-set-preset~ or Emacs is closed.
 
 * Installation
 :PROPERTIES:
