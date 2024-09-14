@@ -235,7 +235,7 @@ invoked without any arguments), which is called after the command
 
 (defun my-cursory-change-color-disable-line-numbers ()
   "Disable line numbers if the Cursory preset is `presentation' or `focus'."
-  (when (member cursory-last-selected-preset '(presentation focus))
+  (when (memq cursory-last-selected-preset '(presentation focus))
     (display-line-numbers-mode -1)))
 #+end_src
 
