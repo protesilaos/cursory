@@ -1,13 +1,97 @@
-#+TITLE: Change log of cursory.el
-#+AUTHOR: Protesilaos Stavrou
-#+EMAIL: info@protesilaos.com
-#+OPTIONS: ':nil toc:nil num:nil author:nil email:nil
+#+title: Change log of cursory.el
+#+author: Protesilaos Stavrou
+#+email: info@protesilaos.com
+#+language: en
+#+options: ':t toc:nil author:t email:t num:t
+#+startup: content
 
 This document contains the release notes for each tagged commit on the
 project's main git repository: <https://github.com/protesilaos/cursory>.
 
 The newest release is at the top.  For further details, please consult
 the manual: <https://protesilaos.com/emacs/cursory>.
+
+#+toc: headlines 1 insert TOC here, with one headline level
+
+* Version 1.1.0 on 2024-09-14
+:PROPERTIES:
+:CUSTOM_ID: h:475f025a-fa3d-4709-884f-bd0b32dc78cc
+:END:
+
+Cursory is in a stable state. This version includes quality-of-life
+refinements.
+
+** The ~cursory-mode~ simplifies how the state is stored
+:PROPERTIES:
+:CUSTOM_ID: h:d2ccd7ea-2379-40d2-b329-3e5d6ab2686c
+:END:
+
+Cursory has functions to store and restore its state. In previous
+versions, we would document how to use those by adding them to the
+relevant hooks. This approach still works, though we now provide an
+easier way to achieve the same result: just enable the ~cursory-mode~.
+
+Technically, all this does is to set the hooks if enabled, and unsets
+them if disabled.
+
+The "restore" phase is the same as before. For example:
+
+#+begin_src emacs-lisp
+;; Set last preset, if available, or fall back to the `bar' preset
+;; from the `cursory-presets'.
+(cursory-set-preset (or (cursory-restore-latest-preset) 'bar))
+#+end_src
+
+** Use the ~cursory-set-preset-hook~
+:PROPERTIES:
+:CUSTOM_ID: h:d60030aa-cfa2-4d94-9757-bbd783cbb7fd
+:END:
+
+The ~cursory-set-preset-hook~ is a normal hook (where functions are
+invoked without any arguments), which is called after the command
+~cursory-set-preset~. Here are some ideas on how to use it:
+
+#+begin_src emacs-lisp
+;; Imagine you have a preset where you want minimal cursor styles.
+;; You call this `focus' and want when you switch to it to change the
+;; cursor color.
+(defun my-cursory-change-color ()
+"Change to a subtle color when the `focus' Cursory preset is selected."
+  (if (eq cursory-last-selected-preset 'focus)
+      (set-face-background 'cursor "#999999")
+    (face-spec-recalc 'cursor nil)))
+
+;; Here we just show how to disable a given mode.  Of course, we can
+;; have something more sophisticated, which stores the last value and
+;; restores it if the condition we are testing for here is not met.
+;; Keeping it simple for now.
+(defun my-cursory-change-color-disable-line-numbers ()
+  "Disable line numbers if the Cursory preset is `presentation' or `focus'."
+  (when (member cursory-last-selected-preset '(presentation focus))
+    (display-line-numbers-mode -1)))
+#+end_src
+
+I am happy to include more examples here, if users have any questions.
+
+** Miscellaneous
+:PROPERTIES:
+:CUSTOM_ID: h:c7233f22-1610-430c-a60a-1cd9168ae624
+:END:
+
+- Fixed a dependency for older Emacs versions. The ~subr-x~, which is
+  built into Emacs, needs to be explicitly loaded at compile time.
+  This makes some parts of the code work as expected. Thanks to Mehdi
+  Khawari for reporting the problem and Nicholas Vollmer for
+  suggesting this change. The exchange took place in issue 1:
+  <https://github.com/protesilaos/cursory/issues/1>. Users should
+  already have this change, as I published a minor release for it
+  (version =1.0.1=).
+
+- Added some missing metadata to the manual. This is useful for the
+  indices and COPYING section.
+
+- Updated the relevant links to the package sources. The main
+  repository is now on GitHub.
 
 * Version 1.0.0 on 2023-06-09
 :PROPERTIES:

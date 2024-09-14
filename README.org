@@ -4,9 +4,9 @@
 #+language: en
 #+options: ':t toc:nil author:t email:t num:t
 #+startup: content
-#+macro: stable-version 1.0.0
-#+macro: release-date 2023-06-09
-#+macro: development-version 1.1.0-dev
+#+macro: stable-version 1.1.0
+#+macro: release-date 2024-09-14
+#+macro: development-version 1.2.0-dev
 #+macro: file @@texinfo:@file{@@$1@@texinfo:}@@
 #+macro: space @@texinfo:@: @@
 #+macro: kbd @@texinfo:@kbd{@@$1@@texinfo:}@@
@@ -49,7 +49,7 @@ Current development target is {{{development-version}}}.
 :CUSTOM_ID: h:acadd212-7168-48b2-aded-f257d5fafeb3
 :END:
 
-Copyright (C) 2022-2023  Free Software Foundation, Inc.
+Copyright (C) 2022-2024  Free Software Foundation, Inc.
 
 #+begin_quote
 Permission is granted to copy, distribute and/or modify this document
@@ -88,8 +88,7 @@ single preset outright.
 The ~cursory-set-preset~ comman calls the ~cursory-set-preset-hook~ as
 its final step. Use this to run other functions after changing the
 cursor ([[#h:035c0942-3163-436a-b0e3-67b1b669d109][Example hooks after setting a preset]]). The variable
-~cursory-last-selected-preset~ may prove useful. [ This hook is part
-of {{{development-version}}}. ]
+~cursory-last-selected-preset~ may prove useful.
 
 Presets consist of an arbitrary symbol broadly described the style set
 followed by a list of properties that govern the cursor type in the
@@ -211,8 +210,6 @@ be restored with the ~cursory-restore-latest-preset~ function.
 
 [[#h:b3c38cda-48d3-4715-9c46-6b9844a6da86][Sample configuration]].
 
-[ The following is part of {{{development-version}}}. ]
-
 Instead of manually storing the latest Cursory preset, users can
 enable the ~cursory-mode~. It arranges to track the latest preset each
 time after using ~cursory-set-preset~ or Emacs is closed.
@@ -223,7 +220,7 @@ time after using ~cursory-set-preset~ or Emacs is closed.
 :END:
 
 The ~cursory-set-preset-hook~ is a normal hook (where functions are
-called without any arguments), which is called after the command
+invoked without any arguments), which is called after the command
 ~cursory-set-preset~. Here are some ideas on how to use it:
 
 #+begin_src emacs-lisp
