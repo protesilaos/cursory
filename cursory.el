@@ -276,7 +276,7 @@ Saving is done by the `cursory-store-latest-preset' function."
   "Return list of properties for PRESET in `cursory-presets'."
   (let ((presets cursory-presets))
     (append (alist-get preset presets)
-            (when-let ((inherit (cursory--get-inherit-name preset)))
+            (when-let* ((inherit (cursory--get-inherit-name preset)))
               (alist-get inherit presets))
             (alist-get t presets))))
 
@@ -318,8 +318,8 @@ Saving is done by the `cursory-store-latest-preset' function."
   "Set PRESET of `cursory-presets' to the global scope.
 With optional non-nil LOCAL, set STYLES scoped locally to the
 current buffer."
-  (if-let ((styles (cursory--get-preset-properties preset)))
-      ;; We do not include this in the `if-let' because we also accept
+  (if-let* ((styles (cursory--get-preset-properties preset)))
+      ;; We do not include this in the `if-let*' because we also accept
       ;; nil values for :cursor-type, :cursor-in-non-selected-windows.
       (let ((type (plist-get styles :cursor-type))
             (type-no-select (plist-get styles :cursor-in-non-selected-windows))
@@ -361,7 +361,7 @@ Call `cursory-set-preset-hook' as a final step."
    (list
     (cursory--set-cursor-prompt)
     current-prefix-arg))
-  (if-let ((preset (cursory--get-preset-as-symbol style)))
+  (if-let* ((preset (cursory--get-preset-as-symbol style)))
       (cursory--set-preset-with-scope preset local)
     (user-error "Cannot determine preset `%s'" preset)))
 
@@ -369,7 +369,7 @@ Call `cursory-set-preset-hook' as a final step."
 (defun cursory-store-latest-preset ()
   "Write latest cursor state to `cursory-latest-state-file'.
 Can be assigned to `kill-emacs-hook'."
-  (when-let ((hist cursory--style-hist))
+  (when-let* ((hist cursory--style-hist))
     (with-temp-file cursory-latest-state-file
       (insert ";; Auto-generated file; don't edit -*- mode: "
               (if (<= 28 emacs-major-version)
