@@ -267,8 +267,9 @@ Saving is done by the `cursory-store-latest-preset' function."
 
 (defun cursory--preset-p (preset)
   "Return non-nil if PRESET is one of the named `cursory-presets'."
-  (let ((presets (cursory--get-presets)))
-    (memq preset presets)))
+  (if-let* ((presets (cursory--get-presets)))
+      (memq preset presets)
+    (error "There are no named presets in `cursory-presets'")))
 
 (defun cursory--get-inherit-name (preset)
   "Get the `:inherit' value of PRESET."
