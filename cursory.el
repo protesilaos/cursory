@@ -261,9 +261,13 @@ Saving is done by the `cursory-store-latest-preset' function."
 (defvar cursory--style-hist '()
   "Minibuffer history of `cursory--set-cursor-prompt'.")
 
+(defun cursory--get-presets ()
+  "Return the `car' of each named entry in `cursory-presets'."
+  (delq t (mapcar #'car cursory-presets)))
+
 (defun cursory--preset-p (preset)
   "Return non-nil if PRESET is one of the named `cursory-presets'."
-  (let ((presets (delq t (mapcar #'car cursory-presets))))
+  (let ((presets (cursory--get-presets)))
     (memq preset presets)))
 
 (defun cursory--get-inherit-name (preset)
