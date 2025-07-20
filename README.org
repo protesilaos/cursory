@@ -201,16 +201,6 @@ PRESET argument, such as:
 (cursory-set-preset 'bar)
 #+end_src
 
-The default behaviour of ~cursory-set-preset~ is to change cursors
-globally.  The user can, however, limit the effect to the current
-buffer.  With interactive use, this is done by invoking the command with
-a universal prefix argument (=C-u= by default).  When called from Lisp,
-the LOCAL argument must be non-nil, thus:
-
-#+begin_src emacs-lisp
-(cursory-set-preset 'bar :local)
-#+end_src
-
 #+findex: cursory-store-latest-preset
 #+vindex: cursory-latest-state-file
 #+findex: cursory-restore-latest-preset

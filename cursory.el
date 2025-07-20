@@ -127,14 +127,6 @@
 ;;
 ;;     (cursory-set-preset 'bar)
 ;;
-;; The default behaviour of `cursory-set-preset' is to change cursors
-;; globally.  The user can, however, limit the effect to the current
-;; buffer.  With interactive use, this is done by invoking the command with
-;; a universal prefix argument (`C-u' by default).  When called from Lisp,
-;; the LOCAL argument must be non-nil, thus:
-;;
-;;     (cursory-set-preset 'bar :local)
-;;
 ;; The function `cursory-store-latest-preset' is used to save the last
 ;; selected style in the `cursory-latest-state-file'.  The value can then
 ;; be restored with the `cursory-restore-latest-preset' function.
@@ -334,13 +326,6 @@ Saving is done by the `cursory-store-latest-preset' function."
       (intern preset)
     preset))
 
-(defun cursory--delete-local-variables ()
-  "Delete all cursor-related local variables."
-  (dolist (var '( cursor-type cursor-in-non-selected-windows
-                  blink-cursor-blinks blink-cursor-interval
-                  blink-cursor-delay))
-    (kill-local-variable var)))
-
 (defvar cursory-last-selected-preset nil
   "The last value of `cursory-set-preset'.")
 
@@ -353,24 +338,18 @@ RGB, a symbol of a face, the symbol `unspecified' or nil."
     ((facep color-value) (face-foreground color-value nil 'default))
     (t nil)))
 
-(defun cursory--set-cursor (color-value frame)
+(defun cursory--set-cursor (color-value)
   "Set the cursor style given COLOR-VALUE.
 When FRAME is a frame object, only do it for it.  Otherwise, apply the
 effect to all frames."
-  (let ((color (cursory--get-cursor-color color-value)))
-    (if frame
-        (if color
-            (set-face-attribute 'cursor frame :background color)
-          (set-face-attribute 'cursor frame :background 'unspecified))
-      (let ((custom--inhibit-theme-enable nil))
-        (if color
-            (custom-theme-set-faces 'cursory `(cursor ((t :background ,color))))
-          (custom-theme-set-faces 'cursory '(cursor (( )))))))))
+  (let ((color (cursory--get-cursor-color color-value))
+        (custom--inhibit-theme-enable nil))
+    (if color
+        (custom-theme-set-faces 'cursory `(cursor ((t :background ,color))))
+      (custom-theme-set-faces 'cursory '(cursor (( )))))))
 
-(defun cursory--set-preset-with-scope (preset &optional local)
-  "Set PRESET of `cursory-presets' to the global scope.
-With optional non-nil LOCAL, set STYLES scoped locally to the
-current buffer."
+(defun cursory--set-preset-subr (preset)
+  "Set PRESET of `cursory-presets' to the global scope."
   (if-let* ((styles (cursory--get-preset-properties preset)))
       ;; We do not include this in the `if-let*' because we also accept
       ;; nil values for :cursor-type, :cursor-in-non-selected-windows.
@@ -381,43 +360,29 @@ current buffer."
             (interval (plist-get styles :blink-cursor-interval))
             (delay (plist-get styles :blink-cursor-delay)))
         (setq cursory-last-selected-preset preset)
-        (cursory--set-cursor color-value (when local (selected-frame)))
-        (if local
-            (setq-local cursor-type type
-                        cursor-in-non-selected-windows type-no-select
-                        blink-cursor-blinks blinks
-                        blink-cursor-interval interval
-                        blink-cursor-delay delay)
-          (cursory--delete-local-variables)
-          (setq-default cursor-type type
-                        cursor-in-non-selected-windows type-no-select
-                        blink-cursor-blinks blinks
-                        blink-cursor-interval interval
-                        blink-cursor-delay delay)
-          ;; We only want to save global values in `cursory-store-latest-preset'.
-          (add-to-history 'cursory--style-hist (format "%s" preset)))
+        (cursory--set-cursor color-value)
+        (setq-default cursor-type type
+                      cursor-in-non-selected-windows type-no-select
+                      blink-cursor-blinks blinks
+                      blink-cursor-interval interval
+                      blink-cursor-delay delay)
+        ;; We only want to save global values in `cursory-store-latest-preset'.
+        (add-to-history 'cursory--style-hist (format "%s" preset))
         (blink-cursor-mode (plist-get styles :blink-cursor-mode))
         (run-hooks 'cursory-set-preset-hook))
     (user-error "Cannot determine styles of preset `%s'" preset)))
 
 ;;;###autoload
-(defun cursory-set-preset (style &optional local)
+(defun cursory-set-preset (style)
   "Set cursor preset associated with STYLE.
 
 STYLE is a symbol that represents the car of a list in
 `cursory-presets'.
 
-With optional LOCAL as a prefix argument, set the
-`cursory-presets' only for the current buffer.  This does not
-cover the `blink-cursor-mode', which is always global.
-
 Call `cursory-set-preset-hook' as a final step."
-  (interactive
-   (list
-    (cursory--set-cursor-prompt)
-    current-prefix-arg))
+  (interactive (list (cursory--set-cursor-prompt)))
   (if-let* ((preset (cursory--get-preset-as-symbol style)))
-      (cursory--set-preset-with-scope preset local)
+      (cursory--set-preset-subr preset)
     (user-error "Cannot determine preset `%s'" preset)))
 
 ;;;###autoload
