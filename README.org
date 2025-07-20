@@ -97,6 +97,7 @@ They look like this:
 
 #+begin_src emacs-lisp
 (bar
+ :cursor-color unspecified
  :cursor-type (bar . 2)
  :cursor-in-non-selected-windows hollow
  :blink-cursor-mode 1
@@ -111,6 +112,15 @@ built-in variables: ~cursor-type~, ~cursor-in-non-selected-windows~,
 ~blink-cursor-blinks~, ~blink-cursor-interval~, ~blink-cursor-delay~.
 The value each property accepts is the same as the variable it
 references.
+
+The ~:cursor-color~ specifies the color value applied to the ~cursor~
+face. When the value is nil or ~unspecified~, no changes to the
+~cursor~ face are made. When the value is a hexadecimal RGB color
+value, like =#123456= it is used as-is. Same if it is a named color
+among those produced by the command ~list-colors-display~. When the
+value is the symbol of a face (unquoted), then the foreground of that
+face is used for the ~cursor~ face, falling back to ~default~. [ The
+=:cursor-color= is part of {{{development-version}}}. ]
 
 A property of =:blink-cursor-mode= is also available.  It is a numeric
 value of either =1= or =-1= and is given to the function
