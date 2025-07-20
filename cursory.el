@@ -6,7 +6,7 @@
 ;; Maintainer: Protesilaos Stavrou <info@protesilaos.com>
 ;; URL: https://github.com/protesilaos/cursory
 ;; Version: 1.1.0
-;; Package-Requires: ((emacs "27.1"))
+;; Package-Requires: ((emacs "29.1"))
 ;; Keywords: convenience, cursor
 
 ;; This file is NOT part of GNU Emacs.
@@ -414,18 +414,26 @@ Can be assigned to `kill-emacs-hook'."
               (insert-file-contents file)
               (read (current-buffer)))))))
 
+(defun cursory-set-faces (&rest _)
+  "Set Cursory faces.
+Add this to the `enable-theme-functions'."
+  (when-let* ((last cursory-last-selected-preset)
+              (styles (cursory--get-preset-properties last))
+              (color-value (plist-get styles :cursor-color)))
+    (cursory--set-cursor color-value)))
+
 ;;;###autoload
 (define-minor-mode cursory-mode
-  "Persist Cursory presets.
-Arrange to store and restore the current Cursory preset when
-closing and restarting Emacs."
+  "Persist Cursory presets and other styles."
   :global t
   (if cursory-mode
       (progn
         (add-hook 'kill-emacs-hook #'cursory-store-latest-preset)
-        (add-hook 'cursory-set-preset-hook #'cursory-store-latest-preset))
+        (add-hook 'cursory-set-preset-hook #'cursory-store-latest-preset)
+        (add-hook 'enable-theme-functions #'cursory-set-faces))
     (remove-hook 'kill-emacs-hook #'cursory-store-latest-preset)
-    (remove-hook 'cursory-set-preset-hook #'cursory-store-latest-preset)))
+    (remove-hook 'cursory-set-preset-hook #'cursory-store-latest-preset)
+    (remove-hook 'enable-theme-functions #'cursory-set-faces)))
 
 (provide 'cursory)
 ;;; cursory.el ends here
