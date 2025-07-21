@@ -397,6 +397,21 @@ Call `cursory-set-preset-hook' as a final step."
     (user-error "Cannot determine preset `%s'" preset)))
 
 ;;;###autoload
+(defun cursory-set-last-or-fallback ()
+  "Set the `cursory-last-selected-preset' or fall back to whatever known values.
+This function is useful when starting up Emacs, such as in the
+`after-init-hook'."
+  (cursory-set-preset
+   (cond
+    ((when-let* ((last-preset (cursory-restore-latest-preset))
+                 (_ (cursory--preset-p last-preset)))
+       last-preset))
+    ((cursory--preset-p 'box)
+     'box)
+    (t
+     'cursory-defaults))))
+
+;;;###autoload
 (defun cursory-store-latest-preset ()
   "Write latest cursor state to `cursory-latest-state-file'.
 Can be assigned to `kill-emacs-hook'."
