@@ -279,12 +279,13 @@ Saving is done by the `cursory-store-latest-preset' function."
   "Minibuffer history of `cursory--set-cursor-prompt'.")
 
 (defun cursory--get-presets ()
+(defun cursory--get-preset-symbols ()
   "Return the `car' of each named entry in `cursory-presets'."
   (delq t (mapcar #'car cursory-presets)))
 
 (defun cursory--preset-p (preset)
   "Return non-nil if PRESET is one of the named `cursory-presets'."
-  (if-let* ((presets (cursory--get-presets)))
+  (if-let* ((presets (cursory--get-preset-symbols)))
       (memq preset presets)
     (error "There are no named presets in `cursory-presets'")))
 
