@@ -331,7 +331,10 @@ be restored with the ~cursory-restore-latest-preset~ function.
 
 Instead of manually storing the latest Cursory preset, users can
 enable the ~cursory-mode~. It arranges to track the latest preset each
-time after using ~cursory-set-preset~ or Emacs is closed.
+time after using ~cursory-set-preset~ or Emacs is closed. The mode
+will also persist the =:cursor-color= attribute, if set, when
+switching to another theme. Otherwise, the theme's style will take
+precedence.
 
 ** Example hooks after setting a preset
 :PROPERTIES:
