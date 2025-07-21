@@ -334,7 +334,7 @@ enable the ~cursory-mode~. It arranges to track the latest preset each
 time after using ~cursory-set-preset~ or Emacs is closed. The mode
 will also persist the =:cursor-color= attribute, if set, when
 switching to another theme. Otherwise, the theme's style will take
-precedence.
+precedence. [ The =:cursor-color= is part of {{{development-version}}}. ]
 
 ** Example hooks after setting a preset
 :PROPERTIES:
