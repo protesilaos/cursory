@@ -170,7 +170,10 @@ Remember to read the doc string of each of these variables or functions.
 
   ;; I am using the default value of `cursory-latest-state-file'.
 
-  ;; Set last preset or fall back to desired style from `cursory-presets'.
+  ;; Set last preset or fall back to desired style from
+  ;; `cursory-presets'.  Alternatively, use the function
+  ;; `cursory-set-last-or-fallback' (can be added to the
+  ;; `after-init-hook'.
   (cursory-set-preset (or (cursory-restore-latest-preset) 'box))
 
   ;; Persist configurations between Emacs sessions.  Also apply the
@@ -335,6 +338,11 @@ time after using ~cursory-set-preset~ or Emacs is closed. The mode
 will also persist the =:cursor-color= attribute, if set, when
 switching to another theme. Otherwise, the theme's style will take
 precedence. [ The =:cursor-color= is part of {{{development-version}}}. ]
+
+#+findex: cursory-set-last-or-fallback
+The function ~cursory-set-last-or-fallback~ can be added to the user
+configuration to automatically set the last known Cursory preset or
+some known fallback values. [ This function is part of {{{development-version}}}. ]
 
 ** Example hooks after setting a preset
 :PROPERTIES:
