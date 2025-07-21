@@ -63,6 +63,125 @@ included in the section entitled “GNU Free Documentation License.”
 modify this GNU manual.”
 #+end_quote
 
+* Installation
+:PROPERTIES:
+:CUSTOM_ID: h:6dd596f2-d98b-4275-b25e-495e2a0616bf
+:END:
+#+cindex: Installation instructions
+
+** GNU ELPA package
+:PROPERTIES:
+:CUSTOM_ID: h:89989a9a-b5e2-48c9-bdc4-bb8aba11a79f
+:END:
+
+The package is available as =cursory=.  Simply do:
+
+: M-x package-refresh-contents
+: M-x package-install
+
+And search for it.
+
+GNU ELPA provides the latest stable release.  Those who prefer to follow
+the development process in order to report bugs or suggest changes, can
+use the version of the package from the GNU-devel ELPA archive.  Read:
+https://protesilaos.com/codelog/2022-05-13-emacs-elpa-devel/.
+
+** Manual installation
+:PROPERTIES:
+:CUSTOM_ID: h:f7c81cf4-581c-4587-9ba8-3c3b70a623f8
+:END:
+
+Assuming your Emacs files are found in =~/.emacs.d/=, execute the
+following commands in a shell prompt:
+
+#+begin_src sh
+cd ~/.emacs.d
+
+# Create a directory for manually-installed packages
+mkdir manual-packages
+
+# Go to the new directory
+cd manual-packages
+
+# Clone this repo, naming it "cursory"
+git clone https://github.com/protesilaos/cursory cursory
+#+end_src
+
+Finally, in your =init.el= (or equivalent) evaluate this:
+
+#+begin_src emacs-lisp
+;; Make Elisp files in that directory available to the user.
+(add-to-list 'load-path "~/.emacs.d/manual-packages/cursory")
+#+end_src
+
+Everything is in place to set up the package.
+
+* Sample configuration
+:PROPERTIES:
+:CUSTOM_ID: h:b3c38cda-48d3-4715-9c46-6b9844a6da86
+:END:
+#+cindex: Package configuration
+
+Remember to read the doc string of each of these variables or functions.
+
+#+begin_src emacs-lisp
+(use-package cursory
+  :ensure t
+  :demand t
+  :if (display-graphic-p)
+  :config
+  (setq cursory-presets
+        '((box
+           :cursor-color success ; will typically be green
+           :blink-cursor-interval 1.2)
+          (box-no-blink
+           :inherit box
+           :blink-cursor-mode -1)
+          (bar
+           :cursor-type (bar . 2)
+           :cursor-color error ; will typically be red
+           :blink-cursor-interval 0.8)
+          (bar-no-other-window
+           :inherit bar
+           :cursor-in-non-selected-windows nil)
+          (bar-no-blink
+           :inherit bar
+           :blink-cursor-mode -1)
+          (underscore
+           :cursor-color warning ; will typically be yellow
+           :cursor-type (hbar . 3)
+           :blink-cursor-interval 0.3
+           :blink-cursor-blinks 50)
+          (underscore-no-other-window
+           :inherit underscore
+           :cursor-in-non-selected-windows nil)
+          (underscore-thick
+           :inherit underscore
+           :cursor-type (hbar . 8)
+           :cursor-in-non-selected-windows (hbar . 3))
+          (t ; the default values
+           :cursor-color unspecified ; use the theme's original
+           :cursor-type box
+           :cursor-in-non-selected-windows hollow
+           :blink-cursor-mode 1
+           :blink-cursor-blinks 10
+           :blink-cursor-interval 0.2
+           :blink-cursor-delay 0.2)))
+
+  ;; I am using the default value of `cursory-latest-state-file'.
+
+  ;; Set last preset or fall back to desired style from `cursory-presets'.
+  (cursory-set-preset (or (cursory-restore-latest-preset) 'box))
+
+  ;; Persist configurations between Emacs sessions.  Also apply the
+  ;; :cursor-color again when swithcing to another theme.
+  (cursory-mode 1)
+  :bind
+  ;; We have to use the "point" mnemonic, because C-c c is often the
+  ;; suggested binding for `org-capture' and is the one I use as well.
+  ("C-c p" . cursory-set-preset))
+#+end_src
+
 * Overview
 :PROPERTIES:
 :CUSTOM_ID: h:5266a2c2-ae71-4018-b597-98952f46b81d
@@ -240,125 +359,6 @@ invoked without any arguments), which is called after the command
 #+end_src
 
 I am happy to include more examples here, if users have any questions.
-
-* Installation
-:PROPERTIES:
-:CUSTOM_ID: h:6dd596f2-d98b-4275-b25e-495e2a0616bf
-:END:
-#+cindex: Installation instructions
-
-** GNU ELPA package
-:PROPERTIES:
-:CUSTOM_ID: h:89989a9a-b5e2-48c9-bdc4-bb8aba11a79f
-:END:
-
-The package is available as =cursory=.  Simply do:
-
-: M-x package-refresh-contents
-: M-x package-install
-
-And search for it.
-
-GNU ELPA provides the latest stable release.  Those who prefer to follow
-the development process in order to report bugs or suggest changes, can
-use the version of the package from the GNU-devel ELPA archive.  Read:
-https://protesilaos.com/codelog/2022-05-13-emacs-elpa-devel/.
-
-** Manual installation
-:PROPERTIES:
-:CUSTOM_ID: h:f7c81cf4-581c-4587-9ba8-3c3b70a623f8
-:END:
-
-Assuming your Emacs files are found in =~/.emacs.d/=, execute the
-following commands in a shell prompt:
-
-#+begin_src sh
-cd ~/.emacs.d
-
-# Create a directory for manually-installed packages
-mkdir manual-packages
-
-# Go to the new directory
-cd manual-packages
-
-# Clone this repo, naming it "cursory"
-git clone https://github.com/protesilaos/cursory cursory
-#+end_src
-
-Finally, in your =init.el= (or equivalent) evaluate this:
-
-#+begin_src emacs-lisp
-;; Make Elisp files in that directory available to the user.
-(add-to-list 'load-path "~/.emacs.d/manual-packages/cursory")
-#+end_src
-
-Everything is in place to set up the package.
-
-* Sample configuration
-:PROPERTIES:
-:CUSTOM_ID: h:b3c38cda-48d3-4715-9c46-6b9844a6da86
-:END:
-#+cindex: Package configuration
-
-Remember to read the doc string of each of these variables or functions.
-
-#+begin_src emacs-lisp
-(use-package cursory
-  :ensure t
-  :demand t
-  :if (display-graphic-p)
-  :config
-  (setq cursory-presets
-        '((box
-           :cursor-color success ; will typically be green
-           :blink-cursor-interval 1.2)
-          (box-no-blink
-           :inherit box
-           :blink-cursor-mode -1)
-          (bar
-           :cursor-type (bar . 2)
-           :cursor-color error ; will typically be red
-           :blink-cursor-interval 0.8)
-          (bar-no-other-window
-           :inherit bar
-           :cursor-in-non-selected-windows nil)
-          (bar-no-blink
-           :inherit bar
-           :blink-cursor-mode -1)
-          (underscore
-           :cursor-color warning ; will typically be yellow
-           :cursor-type (hbar . 3)
-           :blink-cursor-interval 0.3
-           :blink-cursor-blinks 50)
-          (underscore-no-other-window
-           :inherit underscore
-           :cursor-in-non-selected-windows nil)
-          (underscore-thick
-           :inherit underscore
-           :cursor-type (hbar . 8)
-           :cursor-in-non-selected-windows (hbar . 3))
-          (t ; the default values
-           :cursor-color unspecified ; use the theme's original
-           :cursor-type box
-           :cursor-in-non-selected-windows hollow
-           :blink-cursor-mode 1
-           :blink-cursor-blinks 10
-           :blink-cursor-interval 0.2
-           :blink-cursor-delay 0.2)))
-
-  ;; I am using the default value of `cursory-latest-state-file'.
-
-  ;; Set last preset or fall back to desired style from `cursory-presets'.
-  (cursory-set-preset (or (cursory-restore-latest-preset) 'box))
-
-  ;; Persist configurations between Emacs sessions.  Also apply the
-  ;; :cursor-color again when swithcing to another theme.
-  (cursory-mode 1)
-  :bind
-  ;; We have to use the "point" mnemonic, because C-c c is often the
-  ;; suggested binding for `org-capture' and is the one I use as well.
-  ("C-c p" . cursory-set-preset))
-#+end_src
 
 * Acknowledgements
 :PROPERTIES:
