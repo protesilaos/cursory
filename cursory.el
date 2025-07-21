@@ -303,13 +303,6 @@ Saving is done by the `cursory-store-latest-preset' function."
               (alist-get inherit presets))
             (alist-get t presets))))
 
-(defun cursory--presets-no-fallback ()
-  "Return list of `cursory-presets', minus the fallback value."
-  (seq-remove
-   (lambda (symbol)
-     (eq (car symbol) t))
-   cursory-presets))
-
 (defun cursory--set-cursor-prompt ()
   "Promp for `cursory-presets' (used by `cursory-set-preset')."
   (let* ((def (nth 1 cursory--style-hist))
@@ -318,7 +311,7 @@ Saving is done by the `cursory-store-latest-preset' function."
                    "Apply cursor configurations from PRESET: ")))
     (completing-read
      prompt
-     (cursory--presets-no-fallback)
+     (cursory--get-preset-symbols)
      nil t nil 'cursory--style-hist def)))
 
 (defun cursory--get-preset-as-symbol (preset)
