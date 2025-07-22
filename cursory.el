@@ -26,13 +26,12 @@
 
 ;;; Commentary:
 ;;
-;; Cursory provides a thin wrapper around built-in variables that affect
-;; the style of the Emacs cursor on graphical terminals.  The intent is
-;; to allow the user to define preset configurations such as "block with
-;; slow blinking" or "bar with fast blinking" and set them on demand.
-;; The use-case for such presets is to adapt to evolving interface
-;; requirements and concomitant levels of expected comfort, such as in
-;; the difference between writing and reading.
+;; Cursory lets users define preset configurations for the cursor.
+;; Those cover the style of the cursor (e.g. box or bar), whether it
+;; is blinking or not, and how fast, as well as the colour it uses.
+;; Having distinct presets makes it easy to switch between, say, a
+;; "reading mode" with an ambient cursor and a "presentation mode"
+;; with a cursor that is more noticeable and thus easier to spot.
 ;;
 ;; The user option `cursory-presets' holds the presets.  The command
 ;; `cursory-set-preset' is applies one among them.  The command supports
