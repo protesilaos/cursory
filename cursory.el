@@ -335,16 +335,26 @@ Only consider elements that are still part of the `cursory-presets'."
                  (member element (cursory--get-preset-symbols-as-strings)))
         (throw 'first element)))))
 
-(defvar cursory--style-hist '()
-  "Minibuffer history of `cursory--set-cursor-prompt'.")
+(define-obsolete-variable-alias
+  'cursory--style-hist
+  'cursory-preset-history
+  "1.2.0")
 
-(defun cursory--set-cursor-prompt ()
+(defvar cursory-preset-history nil
+  "Minibuffer history of `cursory-set-preset-prompt'.")
+
+(define-obsolete-function-alias
+  'cursory--set-cursor-prompt
+  'cursory-set-preset-prompt
+  "1.2.0")
+
+(defun cursory-set-preset-prompt ()
   "Promp for `cursory-presets' (used by `cursory-set-preset')."
-  (let ((default (cursory--get-first-non-current-preset cursory--style-hist)))
+  (let ((default (cursory--get-first-non-current-preset cursory-preset-history)))
     (completing-read
      (format-prompt "Apply cursor configurations from PRESET" default)
      (cursory--get-preset-symbols)
-     nil t nil 'cursory--style-hist default)))
+     nil t nil 'cursory-preset-history default)))
 
 (defun cursory--get-preset-as-symbol (preset)
   "Return PRESET as a symbol."
@@ -390,7 +400,7 @@ effect to all frames."
                       blink-cursor-interval interval
                       blink-cursor-delay delay)
         ;; We only want to save global values in `cursory-store-latest-preset'.
-        (add-to-history 'cursory--style-hist (format "%s" preset))
+        (add-to-history 'cursory-preset-history (format "%s" preset))
         (blink-cursor-mode (plist-get styles :blink-cursor-mode))
         (run-hooks 'cursory-set-preset-hook))
     (user-error "Cannot determine styles of preset `%s'" preset)))
@@ -403,7 +413,7 @@ STYLE is a symbol that represents the car of a list in
 `cursory-presets'.
 
 Call `cursory-set-preset-hook' as a final step."
-  (interactive (list (cursory--set-cursor-prompt)))
+  (interactive (list (cursory-set-preset-prompt)))
   (if-let* ((preset (cursory--get-preset-as-symbol style)))
       (cursory--set-preset-subr preset)
     (user-error "Cannot determine preset `%s'" preset)))
@@ -427,7 +437,7 @@ This function is useful when starting up Emacs, such as in the
 (defun cursory-store-latest-preset ()
   "Write latest cursor state to `cursory-latest-state-file'.
 Can be assigned to `kill-emacs-hook'."
-  (when-let* ((hist cursory--style-hist))
+  (when-let* ((hist cursory-preset-history))
     (with-temp-file cursory-latest-state-file
       (insert ";; Auto-generated file; don't edit -*- mode: "
               (if (<= 28 emacs-major-version)
