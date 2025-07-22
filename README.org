@@ -4,9 +4,9 @@
 #+language: en
 #+options: ':t toc:nil author:t email:t num:t
 #+startup: content
-#+macro: stable-version 1.1.0
-#+macro: release-date 2024-09-14
-#+macro: development-version 1.2.0-dev
+#+macro: stable-version 1.2.0
+#+macro: release-date 2025-07-22
+#+macro: development-version 1.3.0-dev
 #+macro: file @@texinfo:@file{@@$1@@texinfo:}@@
 #+macro: space @@texinfo:@: @@
 #+macro: kbd @@texinfo:@kbd{@@$1@@texinfo:}@@
@@ -240,8 +240,7 @@ face. When the value is nil or ~unspecified~, no changes to the
 value, like =#123456= it is used as-is. Same if it is a named color
 among those produced by the command ~list-colors-display~. When the
 value is the symbol of a face (unquoted), then the foreground of that
-face is used for the ~cursor~ face, falling back to ~default~. [ The
-=:cursor-color= is part of {{{development-version}}}. ]
+face is used for the ~cursor~ face, falling back to ~default~.
 
 A property of =:blink-cursor-mode= is also available.  It is a numeric
 value of either =1= or =-1= and is given to the function
@@ -336,12 +335,12 @@ enable the ~cursory-mode~. It arranges to track the latest preset each
 time after using ~cursory-set-preset~ or Emacs is closed. The mode
 will also persist the =:cursor-color= attribute, if set, when
 switching to another theme. Otherwise, the theme's style will take
-precedence. [ The =:cursor-color= is part of {{{development-version}}}. ]
+precedence.
 
 #+findex: cursory-set-last-or-fallback
 The function ~cursory-set-last-or-fallback~ can be added to the user
 configuration to automatically set the last known Cursory preset or
-some known fallback values. [ This function is part of {{{development-version}}}. ]
+some known fallback values.
 
 ** Example hooks after setting a preset
 :PROPERTIES:
