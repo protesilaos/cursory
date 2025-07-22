@@ -275,9 +275,6 @@ Saving is done by the `cursory-store-latest-preset' function."
   :package-version '(cursory . "1.1.0")
   :group 'cursory)
 
-(defvar cursory--style-hist '()
-  "Minibuffer history of `cursory--set-cursor-prompt'.")
-
 (defconst cursory-fallback-preset
   '(cursory-defaults
     :cursor-color unspecified ; use the theme's original
@@ -320,25 +317,40 @@ Saving is done by the `cursory-store-latest-preset' function."
               (alist-get inherit presets))
             (alist-get t presets))))
 
+(defun cursory--get-preset-symbols-as-strings ()
+  "Convert `fontaine--get-preset-symbols' return value to list of string."
+  (mapcar #'symbol-name (cursory--get-preset-symbols)))
+
+(defvar cursory-last-selected-preset nil
+  "The last value of `cursory-set-preset'.")
+
+(defun cursory--get-first-non-current-preset (history)
+  "Return the first element of HISTORY which is not `cursory-last-selected-preset'.
+Only consider elements that are still part of the `cursory-presets'."
+  (catch 'first
+    (dolist (element history)
+      (when (symbolp element)
+        (setq element (symbol-name element)))
+      (when (and (not (string= element cursory-last-selected-preset))
+                 (member element (cursory--get-preset-symbols-as-strings)))
+        (throw 'first element)))))
+
+(defvar cursory--style-hist '()
+  "Minibuffer history of `cursory--set-cursor-prompt'.")
+
 (defun cursory--set-cursor-prompt ()
   "Promp for `cursory-presets' (used by `cursory-set-preset')."
-  (let* ((def (nth 1 cursory--style-hist))
-         (prompt (if def
-                     (format "Apply cursor configurations from PRESET [%s]: " def)
-                   "Apply cursor configurations from PRESET: ")))
+  (let ((default (cursory--get-first-non-current-preset cursory--style-hist)))
     (completing-read
-     prompt
+     (format-prompt "Apply cursor configurations from PRESET" default)
      (cursory--get-preset-symbols)
-     nil t nil 'cursory--style-hist def)))
+     nil t nil 'cursory--style-hist default)))
 
 (defun cursory--get-preset-as-symbol (preset)
   "Return PRESET as a symbol."
   (if (stringp preset)
       (intern preset)
     preset))
-
-(defvar cursory-last-selected-preset nil
-  "The last value of `cursory-set-preset'.")
 
 (defun cursory--get-cursor-color (color-value)
   "Return the color of the `cursor' face based on VALUE.
