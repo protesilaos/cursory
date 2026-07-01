@@ -129,7 +129,7 @@ Remember to read the docstring of each of these variables or functions.
   :ensure t
   :demand t
   :if (display-graphic-p)
-  :config
+  :init
   (setq cursory-presets
         '((box
            :cursor-color success ; will typically be green
@@ -167,7 +167,7 @@ Remember to read the docstring of each of these variables or functions.
            :blink-cursor-blinks 10
            :blink-cursor-interval 0.2
            :blink-cursor-delay 0.2)))
-
+  :config
   ;; I am using the default value of `cursory-latest-state-file'.
 
   ;; Set last preset or fall back to desired style from
@@ -379,8 +379,9 @@ Cursory is meant to be a collective effort.  Every bit of help matters.
 
 + Author/maintainer :: Protesilaos.
 
-+ Contributions to the code or manual :: Christopher League, Mehdi
-  Khawari, Nicholas Vollmer, Philip Kaludercic, Stefan Monnier.
++ Contributions to the code or manual :: Christopher League, Johan
+  Widén, Mehdi Khawari, Nicholas Vollmer, Philip Kaludercic, Stefan
+  Monnier.
 
 * Also see
 :PROPERTIES:
